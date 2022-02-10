@@ -7,11 +7,11 @@ export const Todo = () => {
 
 	const addTask = (e) => {
 		if (e.keyCode == 13 && todoVal != "" && !/^\s*$/.test(todoVal)) {
-			let taskObj = {
-				task: todoVal.trim(),
-				isMarked: false,
+			let task = {
+				label: todoVal.trim(),
+				done: false,
 			};
-			setListItem([...listItems, taskObj]);
+			setListItem([...listItems, task]);
 			setTodoVal("");
 		}
 	};
@@ -23,8 +23,8 @@ export const Todo = () => {
 
 		if (e.target.nodeName == "LI") {
 			let li = listItems[e.target.id];
-			if (li.isMarked) li.isMarked = false;
-			else li.isMarked = true;
+			if (li.done) li.done = false;
+			else li.done = true;
 			setListItem([...listItems]);
 		}
 	};
@@ -54,7 +54,7 @@ export const Todo = () => {
 										key={i}
 										id={i}
 										task={task}
-										marked={task.isMarked}
+										done={task.done}
 									/>
 								))
 							) : (
