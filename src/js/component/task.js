@@ -1,8 +1,6 @@
 import React from "react";
 
 export const Task = (props) => {
-	console.log(props.task);
-	console.log(props.task.done);
 	return (
 		<li
 			id={props.id}

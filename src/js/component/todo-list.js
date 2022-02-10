@@ -1,9 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Task } from "./task";
 
 export const Todo = () => {
 	const [todoVal, setTodoVal] = useState("");
 	const [listItems, setListItem] = useState([]);
+	const url = "https://assets.breatheco.de/apis/fake/todos/user/wayneb";
+
+	useEffect(() => {
+		getTasks();
+	}, []);
+	//useEffect to get initial todo's from backEnd.
+
+	const putTask = (tasks) => {
+		fetch(url, {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(tasks), // data can be a `string` or  an {object} which comes from somewhere further above in our application
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((res) => {
+				if (!res.ok) throw Error(res.statusText);
+				return res.json();
+			})
+			.then((response) => console.log("Success:", response))
+			.catch((error) => console.error(error));
+	};
+
+	const getTasks = () => {
+		let tasks;
+		fetch(url)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(response.statusText);
+				}
+				return response.json();
+			})
+			.then((jsonResponse) => {
+				tasks = jsonResponse;
+				setListItem(jsonResponse);
+			})
+			.catch((e) => {
+				console.log("Looks like there was a problem:", e);
+			});
+		return tasks;
+	};
 
 	const addTask = (e) => {
 		if (e.keyCode == 13 && todoVal != "" && !/^\s*$/.test(todoVal)) {
@@ -11,13 +52,16 @@ export const Todo = () => {
 				label: todoVal.trim(),
 				done: false,
 			};
+			putTask([...listItems, task]);
 			setListItem([...listItems, task]);
 			setTodoVal("");
 		}
 	};
+
 	const removeOrMarkTask = (e) => {
 		if (e.target.nodeName == "I") {
 			listItems.splice(e.target.parentElement.parentElement.id, 1);
+			putTask(listItems);
 			setListItem([...listItems]);
 		}
 
