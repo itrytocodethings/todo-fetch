@@ -28,7 +28,6 @@ export const Todo = () => {
 	};
 
 	const getTasks = () => {
-		let tasks;
 		fetch(url)
 			.then((response) => {
 				if (!response.ok) {
@@ -37,14 +36,21 @@ export const Todo = () => {
 				return response.json();
 			})
 			.then((jsonResponse) => {
-				tasks = jsonResponse;
 				setListItem(jsonResponse);
 			})
 			.catch((e) => {
 				console.log("Looks like there was a problem:", e);
 			});
-		return tasks;
 	};
+
+	// const deleteList = (url) => {
+	// 	fetch(url, {
+	// 		method: "DELETE",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 	});
+	// };
 
 	const addTask = (e) => {
 		if (e.keyCode == 13 && todoVal != "" && !/^\s*$/.test(todoVal)) {
@@ -92,7 +98,7 @@ export const Todo = () => {
 						<ul
 							className="list-group py-2"
 							onClick={removeOrMarkTask}>
-							{listItems.length > 0 ? (
+							{listItems.length > 1 ? (
 								listItems.map((task, i) => (
 									<Task
 										key={i}
@@ -108,10 +114,10 @@ export const Todo = () => {
 							)}
 						</ul>
 						<div className="paper-foot p-0 m-0">
-							{listItems.length > 0 ? (
+							{listItems.length > 1 ? (
 								<small className="count text-muted">
 									<em>
-										{`${listItems.length} ${
+										{`${listItems.length - 1} ${
 											listItems.length > 1
 												? `items`
 												: `item`

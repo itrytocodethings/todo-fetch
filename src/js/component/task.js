@@ -1,7 +1,7 @@
 import React from "react";
 
 export const Task = (props) => {
-	return (
+	return props.id != 0 ? (
 		<li
 			id={props.id}
 			className={`list-group-item ${props.task.done ? "marked" : ""}`}>
@@ -10,5 +10,5 @@ export const Task = (props) => {
 				<i className="far fa-trash-alt"></i>
 			</span>
 		</li>
-	);
+	) : null;
 };
